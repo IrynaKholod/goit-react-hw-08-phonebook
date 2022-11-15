@@ -16,10 +16,11 @@ export class App extends Component {
   };
   addContact = ({id, name, number}) => {
     const isNameAdded = name.toUpperCase();
-    let isAdded = this.state.contacts.forEach(el => {
+    let isAdded = this.state.contacts.find(el => {
       if (el.name.toUpperCase() === isNameAdded) {
         alert(`${name} is already in contacts`);
         isAdded = true;
+   
       }
     });
 
