@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+git remote add origin https://github.com/IrynaKholod/goit-react-hw-04-phonebook.gitimport PropTypes from 'prop-types';
 import {List, ContactItem, DeleteButton, ContactName } from './ContactList.styled'
 import { FiUserMinus } from "react-icons/fi";
 
