@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+
 import {List, ContactItem, DeleteButton, ContactName } from './ContactList.styled'
 import { FiUserMinus } from "react-icons/fi";
 

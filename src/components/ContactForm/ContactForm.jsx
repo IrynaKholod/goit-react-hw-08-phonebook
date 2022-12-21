@@ -1,4 +1,5 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import PropTypes from 'prop-types';
 import { nanoid } from 'nanoid';
 import {FormField, AddContactBtn} from './ContactForm.styled';
 import React from 'react';
@@ -56,4 +57,8 @@ const ContactForm = ({ onSubmit }) => {
   );
 };
 
+
+ContactForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired
+}
  export default ContactForm;

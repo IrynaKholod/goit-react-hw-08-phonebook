@@ -7,9 +7,9 @@ import { Container, MainTitle, Title } from './App.styled';
 
 
 export function App() {
-  const [contacts, setContacts] = useState(
-     [],
-    );
+  const [contacts, setContacts] = useState(() => {
+    return JSON.parse(window.localStorage.getItem('contacts')) ?? [];
+});
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
