@@ -1,64 +1,74 @@
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import PropTypes from 'prop-types';
 import { nanoid } from 'nanoid';
-import {FormField, AddContactBtn} from './ContactForm.styled';
+import toast, { Toaster } from 'react-hot-toast';
+import { FormField, AddContactBtn, FieldInput } from './ContactForm.styled';
 import React from 'react';
+import { useState } from 'react';
+import { addContact, getContactsData } from '../../Redax/ContactsSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
-const ContactForm = ({ onSubmit }) => {
-  
-  const hendleSubmit = (values, { resetForm }) => {
-    const  {name, number} = values;
-    const id = nanoid();
-   
-    if (onSubmit({ id, name, number })) {
-      resetForm();
+export const ContactForm = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContactsData);
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
+
+  const handlerChange = e => {
+    const { name, value } = e.currentTarget;
+
+    switch (name) {
+      case 'name':
+        setName(value);
+        break;
+
+      case 'number':
+        setNumber(value);
+        break;
+
+      default:
+        break;
     }
-    resetForm();
-    
   };
 
-  const initialValues = { name: '', number: '' };
+  const handlerSubmit = e => {
+    e.preventDefault();
 
+    if (contacts.some(contact => contact.name === name)) {
+      toast(`${name}is already in contacts`);
+      return;
+    }
+
+    dispatch(addContact({ id: nanoid(), name: name, number: number }));
+    e.target.reset();
+  };
 
   return (
-    
-    <Formik 
-    initialValues={initialValues}
-    onSubmit={hendleSubmit}
-    >
-      <Form autoComplete="off">
-        <FormField >
-          Name
-          <Field
-            type="text"
-            name="name"
-            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-            placeholder="Enter name"
-            required
-          />
-          <ErrorMessage name="name" component='div' />
-        </FormField >
-        <FormField >
-          Number
-          <Field
-            type="tel"
-            name="number"
-            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-            placeholder="987-65-43"
-            required
-          />
-          <ErrorMessage name="number" component='div' />
-        </FormField>
-        <AddContactBtn type="submit">Add contact</AddContactBtn>
-      </Form>
-    </Formik>
+    <form autoComplete="off" onSubmit={handlerSubmit}>
+      <FormField>
+        Name
+        <FieldInput
+          type="text"
+          name="name"
+          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+          placeholder="Enter name"
+          required
+          onChange={handlerChange}
+        />
+      </FormField>
+      <FormField>
+        Number
+        <FieldInput
+          type="tel"
+          name="number"
+          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+          placeholder="987-65-43"
+          required
+          onChange={handlerChange}
+        />
+      </FormField>
+      <AddContactBtn type="submit">Add contact</AddContactBtn>
+      <Toaster />
+    </form>
   );
 };
-
-
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired
-}
- export default ContactForm;
