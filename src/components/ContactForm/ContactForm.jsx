@@ -37,7 +37,7 @@ export const ContactForm = () => {
         contact => contact.name.toLowerCase() === name.toLowerCase()
       )
     ) {
-      toast(`${name}is already in contacts`);
+      toast(`${name} is already in contacts`);
       return;
     }
 
