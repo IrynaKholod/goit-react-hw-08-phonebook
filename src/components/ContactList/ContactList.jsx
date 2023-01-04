@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   List,
@@ -19,7 +18,7 @@ export const ContactList = () => {
   };
 
   const visibleContacts = contacts.filter(contact => contact.name.toLowerCase().includes(filter));
-  console.log(visibleContacts);
+ 
   return (
     <List>
       {visibleContacts.map(({ id, name, number }) => (
@@ -36,13 +35,3 @@ export const ContactList = () => {
   );
 };
 
-ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string,
-      number: PropTypes.string,
-    })
-  ),
-  onDeleteContact: PropTypes.func,
-};

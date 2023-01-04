@@ -32,7 +32,11 @@ export const ContactForm = () => {
   const handlerSubmit = e => {
     e.preventDefault();
 
-    if (contacts.some(contact => contact.name === name)) {
+    if (
+      contacts.some(
+        contact => contact.name.toLowerCase() === name.toLowerCase()
+      )
+    ) {
       toast(`${name}is already in contacts`);
       return;
     }
