@@ -1,11 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
 import React from 'react';
 import { SearchInput, FormField } from './Filter.styled';
-import { addFilter } from 'Redax/FilterSlice';
+import { filterContacts } from 'Redax/FilterSlice';
+import { getFilter } from 'Redax/Selectors';
 
 export const Filter = () => {
   const dispatch = useDispatch();
-  const filter = useSelector(state => state.filter.filter);
+  const filter = useSelector(getFilter);
   
   return (
     <FormField>
@@ -15,7 +16,7 @@ export const Filter = () => {
         name="filter"
         value={filter}
         onChange={e => {
-          dispatch(addFilter(e.currentTarget.value));
+          dispatch(filterContacts(e.currentTarget.value));
         }}
       />
     </FormField>

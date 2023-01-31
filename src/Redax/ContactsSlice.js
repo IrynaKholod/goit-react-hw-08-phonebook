@@ -1,33 +1,52 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import { createSlice, isAnyOf } from '@reduxjs/toolkit';
+import { addContact, deleteContact, fetchContacts } from './Operations';
+
+const extraActions = [fetchContacts, addContact, deleteContact];
+
+const getActions = type => extraActions.map(action => action[type]);
+
+const handleFetchContacts = (state, action) => {
+  state.items = action.payload;
+};
+
+const handleAddContacts = (state, action) => {
+  state.items.push(action.payload);
+};
+
+const handleDeleteContacts = (state, action) => {
+  const idx = state.items.findIndex(({ id }) => id === action.payload.id);
+  state.items.splice(idx, 1);
+};
+
+const anyFulfilledReducer = state => {
+  state.isLoading = false;
+  state.error = null;
+};
+
+const anyPendingReducer = state => {
+  state.isLoading = true;
+};
+
+const anyRejectedReducer = (state, action) => {
+  state.isLoading = false;
+  state.error = action.payload;
+};
 
 export const contactsSlice = createSlice({
   name: 'contacts',
   initialState: {
-    contacts: [],
+    items: [],
+    isLoading: false,
+    error: null,
   },
-  reducers: {
-    addContact(state, action) {
-      state.contacts.push(action.payload);
-    },
-    deleteContact(state, action) {
-      state.contacts = state.contacts.filter(
-        contact => contact.id !== action.payload
-      );
-    },
-  },
+  extraReducers: builder =>
+    builder
+      .addCase(fetchContacts.fulfilled, handleFetchContacts)
+      .addCase(addContact.fulfilled, handleAddContacts)
+      .addCase(deleteContact.fulfilled, handleDeleteContacts)
+      .addMatcher(isAnyOf(...getActions('pending')), anyPendingReducer)
+      .addMatcher(isAnyOf(...getActions('rejected')), anyRejectedReducer)
+      .addMatcher(isAnyOf(...getActions('fulfilled')), anyFulfilledReducer),
 });
 
-const persistConfig = {
-  key: 'contacts',
-  storage,
-};
-
-export const contactsPersistedReducer = persistReducer(
-  persistConfig,
-  contactsSlice.reducer
-);
-
-export const { addContact, deleteContact } = contactsSlice.actions;
-export const getContactsData = state => state.contacts.contacts;
+export const contactsReducer = contactsSlice.reducer;

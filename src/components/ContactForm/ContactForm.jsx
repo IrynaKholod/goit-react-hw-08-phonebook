@@ -1,14 +1,14 @@
 import { nanoid } from 'nanoid';
 import toast, { Toaster } from 'react-hot-toast';
 import { FormField, AddContactBtn, FieldInput } from './ContactForm.styled';
-import React from 'react';
-import { useState } from 'react';
-import { addContact, getContactsData } from '../../Redax/ContactsSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
+import { addContact } from '../../Redax/Operations';
+import { getContacts } from '../../Redax/Selectors';
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(getContactsData);
+  const items = useSelector(getContacts);
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
@@ -33,9 +33,7 @@ export const ContactForm = () => {
     e.preventDefault();
 
     if (
-      contacts.some(
-        contact => contact.name.toLowerCase() === name.toLowerCase()
-      )
+      items.some(contact => contact.name.toLowerCase() === name.toLowerCase())
     ) {
       toast(`${name} is already in contacts`);
       return;

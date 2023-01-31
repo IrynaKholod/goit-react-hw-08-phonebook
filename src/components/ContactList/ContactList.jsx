@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { getIsLoading, getError } from '../../Redax/Selectors';
 import {
   List,
   ContactItem,
@@ -6,32 +8,41 @@ import {
   ContactName,
 } from './ContactList.styled';
 import { FiUserMinus } from 'react-icons/fi';
-import { deleteContact, getContactsData } from 'Redax/ContactsSlice';
+import { fetchContacts, deleteContact } from '../../Redax/Operations';
+import { getVisibleContacts } from 'Redax/Selectors';
 
 export const ContactList = () => {
+  const contacts = useSelector(getVisibleContacts);
+  const isLoading = useSelector(getIsLoading);
+  const error = useSelector(getError);
+
   const dispatch = useDispatch();
-  const contacts = useSelector(getContactsData);
-  const filter = useSelector(state => state.filter.filter);
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   const onDeleteContact = contactId => {
     dispatch(deleteContact(contactId));
   };
 
-  const visibleContacts = contacts.filter(contact => contact.name.toLowerCase().includes(filter));
- 
   return (
     <List>
-      {visibleContacts.map(({ id, name, number }) => (
-        <ContactItem key={id}>
-          <ContactName>
-            {name}: {number}
-          </ContactName>
-          <DeleteButton type="submit" onClick={() => onDeleteContact(id)}>
-            <FiUserMinus />
-          </DeleteButton>
-        </ContactItem>
-      ))}
+      {error && (
+        <p>Ups... Something going wrong! Please, refresh page and try again!</p>
+      )}
+      {isLoading && <b>Loading...</b>}
+      {contacts.length > 0 &&
+        contacts.map(({ id, name, phone }) => (
+          <ContactItem key={id}>
+            <ContactName>
+              {name}: {phone}
+            </ContactName>
+            <DeleteButton type="submit" onClick={() => onDeleteContact(id)}>
+              <FiUserMinus />
+            </DeleteButton>
+          </ContactItem>
+        ))}
     </List>
   );
 };
-
