@@ -33,10 +33,10 @@ export const ContactList = () => {
       )}
       {isLoading && <b>Loading...</b>}
       {contacts.length > 0 &&
-        contacts.map(({ id, name, phone }) => (
+        contacts.map(({ id, name, number }) => (
           <ContactItem key={id}>
             <ContactName>
-              {name}: {phone}
+              {name}: {number}
             </ContactName>
             <DeleteButton type="submit" onClick={() => onDeleteContact(id)}>
               <FiUserMinus />

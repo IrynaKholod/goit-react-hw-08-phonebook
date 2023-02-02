@@ -11,19 +11,19 @@ export const Container = styled.div`
   alignitems: 'center';
   fontsize: 40;
   color: '#010101';
-  width: 300px;
+  width: 800px;
   box-shadow: 0px 2px 1px 0px #00000033, 0px 2px 1px 0px #00000033,
     0px 1px 3px 0px #0000001f;
-`;
-
-export const MainTitle = styled.h1`
-  margin-top: 7px;
-  font-size: 30px;
-  color: #e776aa;
 `;
 
 export const Title = styled.h2`
   font-size: 20;
   align-item: left;
+  color: #e776aa;
+`;
+
+export const MainTitle = styled.h1`
+  margin-top: 7px;
+  font-size: 30px;
   color: #e776aa;
 `;

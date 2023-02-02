@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 import toast, { Toaster } from 'react-hot-toast';
-import { FormField, AddContactBtn, FieldInput } from './ContactForm.styled';
+import { FormField, AddContactBtn, FieldInput, AddContactForm } from './ContactForm.styled';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { addContact } from '../../Redax/Operations';
@@ -44,7 +44,7 @@ export const ContactForm = () => {
   };
 
   return (
-    <form autoComplete="off" onSubmit={handlerSubmit}>
+    <AddContactForm autoComplete="off" onSubmit={handlerSubmit}>
       <FormField>
         Name
         <FieldInput
@@ -71,6 +71,6 @@ export const ContactForm = () => {
       </FormField>
       <AddContactBtn type="submit">Add contact</AddContactBtn>
       <Toaster />
-    </form>
+    </AddContactForm>
   );
 };

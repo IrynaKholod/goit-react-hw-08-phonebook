@@ -17,7 +17,7 @@ export const ContactItem = styled.li`
 export const ContactName = styled.p`
   margin: 10px 0;
   padding: 0;
-  font-size: 12px;
+  font-size: 14px;
 `;
 
 export const DeleteButton = styled.button`
